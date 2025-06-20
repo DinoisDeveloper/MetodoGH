@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Método GH</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #000000; /* Preto absoluto */
+        color: #FFFFFF; /* Texto branco */
+        cursor: url('/images/custom-cursor.png'), auto; /* Custom cursor */
+      }
+      button, a, input[type="radio"], input[type="checkbox"], label {
+        cursor: inherit; /* Ensure interactive elements also use custom cursor or specific ones */
+      }
+      button:hover, a:hover {
+         /* You might want a different cursor for hover, e.g., a pointer version of custom cursor */
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #FF0000;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #CC0000;
+      }
+      /* Pulsating animation */
+      @keyframes pulse-red {
+        0%, 100% {
+          box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+        }
+        50% {
+          box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+        }
+      }
+      .animate-pulse-red {
+        animation: pulse-red 2s infinite;
+      }
+
+      /* Quiz question transition */
+      .quiz-question-container-animate {
+        animation: fadeInSlideRight 0.4s ease-out forwards;
+      }
+      @keyframes fadeInSlideRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Chatbot entrance - This can be removed if chatbot is fully removed or kept for other modals */
+      .animate-slide-in-up-fade {
+        animation: slideInUpFade 0.4s ease-out forwards;
+      }
+      @keyframes slideInUpFade {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Generic Fade In */
+      .animate-fade-in {
+        animation: fadeInAnimation 0.5s ease-out forwards;
+      }
+      @keyframes fadeInAnimation {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      /* Progress bar fill animation */
+      .progress-bar-fill-animate {
+        animation: fillProgress 1s ease-out forwards;
+      }
+      @keyframes fillProgress {
+        from { width: 0%; }
+      }
+      /* Ensure radio and checkbox are stylable */
+      .custom-radio:checked {
+        background-color: #FF0000;
+        border-color: #FF0000;
+      }
+      .custom-radio:checked:hover {
+        background-color: #FF3333;
+        border-color: #FF3333;
+      }
+      .custom-radio:focus, .custom-checkbox:focus {
+        ring: 2px;
+        ring-color: #FF0000;
+        ring-offset: black;
+      }
+       .custom-checkbox:checked {
+        background-color: #FF0000;
+        border-color: #FF0000;
+      }
+      .custom-checkbox:checked:hover {
+        background-color: #FF3333;
+        border-color: #FF3333;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.5.1",
+    "vite": "https://esm.sh/vite@^6.3.5",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^4.5.2"
+  }
+}
+</script>
+</head>
+  <body class="bg-black text-white">
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <symbol id="icon-shield-check" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 1.944c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zM9 13.5a1 1 0 01-2 0V9a1 1 0 012 0v4.5zm1.503-7.057a.5.5 0 00-.707-.707L7.5 7.039V5.5a.5.5 0 00-1 0v2.504a.5.5 0 00.75.433l2.5-1.5a.5.5 0 00-.047-.88zM10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          <path d="M10 .5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19ZM8.293 11.207a1 1 0 0 1 0-1.414L9.586 8.5H7A.5.5 0 0 1 7 7.5h3a.5.5 0 0 1 .354.146l2 2a.5.5 0 0 1 0 .708l-2 2A.5.5 0 0 1 10 12.5H7a.5.5 0 0 1 0-1H8.293Z"/>
+          <path d="M10,1.5c-4.694,0-8.5,3.806-8.5,8.5s3.806,8.5,8.5,8.5s8.5-3.806,8.5-8.5S14.694,1.5,10,1.5z M10,17.5c-3.584,0-6.5-2.916-6.5-6.5s2.916-6.5,6.5-6.5s6.5,2.916,6.5,6.5S13.584,17.5,10,17.5z M13.707,7.293c-0.391-0.391-1.023-0.391-1.414,0L9.5,9.086L8.707,8.293c-0.391-0.391-1.023-0.391-1.414,0s-0.391,1.023,0,1.414l1.5,1.5C9.083,11.503,9.291,11.5,9.5,11.5s0.417,0.003,0.707-0.293l3.5-3.5C14.098,8.316,14.098,7.684,13.707,7.293z"/>
+        </symbol>
+        <symbol id="icon-check-circle" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </symbol>
+         <symbol id="icon-user-circle" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0012 11z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="icon-home" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+        </symbol>
+        <symbol id="icon-puzzle" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M7 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H9.575a1.5 1.5 0 00-1.458.975l-.33 1.05A1.5 1.5 0 009.25 9.5H10V8a1 1 0 112 0v1.5a1.5 1.5 0 001.458.975l.33 1.05A1.5 1.5 0 0015.25 10H16a1 1 0 110 2h-.75a1.5 1.5 0 00-1.458-.975l-.33-1.05A1.5 1.5 0 0012.025 8.5H12v2.5a1 1 0 11-2 0V8.5H8.575a1.5 1.5 0 00-1.458.975l-.33 1.05A1.5 1.5 0 008.25 12H10a1 1 0 110 2H8.25a1.5 1.5 0 00-1.458-.975L6.462 12a1.5 1.5 0 00-1.457-.975H4a1 1 0 110-2h.005A1.5 1.5 0 005.462 8l.33-1.05A1.5 1.5 0 004.333 6H4a1 1 0 01-1-1V4a1 1 0 011-1h3zm8.5 8.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM4.5 14a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM13 16a1 1 0 011-1h1.5a1.5 1.5 0 100-3H14a1 1 0 110-2h.5A1.5 1.5 0 1016 8.5V7a1 1 0 112 0v1.5a1.5 1.5 0 10-1.5 1.5H16a1 1 0 110 2h.5a1.5 1.5 0 100 3H14a1 1 0 01-1-1z" />
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+        </symbol>
+         <symbol id="icon-lightning-bolt" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="icon-chevron-down" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+        </symbol>
+      </defs>
+    </svg>
+    <div id="root"></div>
+    <!-- Audio elements for preloading -->
+    <audio id="audio-click" src="/sounds/click.mp3" preload="auto"></audio>
+    
+    <script type="module" src="./src/index.tsx"></script>
+  </body>
+</html>

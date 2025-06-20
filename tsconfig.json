@@ -1,26 +1,39 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "noEmit": true, // Vite faz o build, tsc é para checagem de tipos
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Paths for absolute imports (optional) */
+    // "baseUrl": "./src",
+    // "paths": {
+    //   "@components/*": ["components/*"],
+    //   "@hooks/*": ["hooks/*"],
+    //   "@services/*": ["services/*"],
+    //   "@utils/*": ["utils/*"],
+    //   "@constants/*": ["constants/*"],
+    //   "@contexts/*": ["contexts/*"],
+    //   "@pages/*": ["pages/*"],
+    //   "@assets/*": ["assets/*"]
+    // }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src", "vite.config.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
