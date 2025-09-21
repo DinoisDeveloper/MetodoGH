@@ -109,10 +109,10 @@ const MultiStepQuizFlowOG: React.FC<MultiStepQuizFlowOGProps> = ({
 
   return (
     <div key={currentQuestion.id} className="quiz-question-container-animate">
-      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-6 min-h-[60px] flex items-center">
+      <h3 className="text-xl sm:text-2xl font-semibold text-white mb-6">
         {currentQuestion.text}
       </h3>
-      <div className="space-y-3 mb-8">
+      <div className="space-y-3 mb-6 max-h-[45vh] overflow-y-auto pr-2">
         {currentQuestion.options?.map(option => (
           <label
             key={option.value}
@@ -136,13 +136,13 @@ const MultiStepQuizFlowOG: React.FC<MultiStepQuizFlowOGProps> = ({
 
       {error && <p className="text-red-400 text-sm mb-4 animate-pulse">{error}</p>}
 
-      <div className="flex justify-between items-center mt-8">
+      <div className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-between sm:items-center mt-6">
         <Button
           type="button"
           onClick={handlePreviousClick}
           disabled={currentQuestionIndex === 0}
           variant="secondary"
-          className="!px-5 !py-2.5"
+          className="!px-5 !py-2.5 w-full sm:w-auto"
         >
           <ChevronLeftIcon className="w-5 h-5 mr-1 inline" /> Voltar
         </Button>
@@ -150,7 +150,7 @@ const MultiStepQuizFlowOG: React.FC<MultiStepQuizFlowOGProps> = ({
           type="button"
           onClick={handleNextClick}
           variant="primary"
-          className="!px-5 !py-2.5"
+          className="!px-5 !py-2.5 w-full sm:w-auto"
         >
           {currentQuestionIndex < questions.length - 1 ? 'Próxima Pergunta' : 'Próxima Etapa'}
           <ChevronRightIcon className="w-5 h-5 ml-1 inline" />

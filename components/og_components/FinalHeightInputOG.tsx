@@ -60,19 +60,19 @@ const FinalHeightInputOG: React.FC<FinalHeightInputOGProps> = ({ question, initi
 
         {error && <p className="text-red-400 text-sm mb-4 animate-pulse">{error}</p>}
 
-        <div className="flex justify-between items-center mt-8">
+        <div className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-between sm:items-center mt-8">
           <Button
             type="button"
             onClick={onBack}
             variant="secondary"
-            className="!px-5 !py-2.5"
+            className="!px-5 !py-2.5 w-full sm:w-auto"
           >
             <ChevronLeftIcon className="w-5 h-5 mr-1 inline" /> Voltar
           </Button>
           <Button
             type="submit"
             variant="primary"
-            className="!px-5 !py-2.5"
+            className="!px-5 !py-2.5 w-full sm:w-auto"
             pulsate
           >
             Calcular Resultado <ChevronRightIcon className="w-5 h-5 ml-1 inline" />

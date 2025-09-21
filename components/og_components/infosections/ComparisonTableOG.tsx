@@ -1,20 +1,23 @@
 import React from 'react';
 
-interface ComparisonTableOGProps { // Prop interface name remains
-  headers: string[]; // e.g., ["Recursos", "Simple GH", "Essencial GH", "Elite GH"]
-  rows: Array<{ resource: string; [key: string]: string }>; 
+interface ComparisonTableOGProps {
+  headers: string[];
+  rows: Array<{ resource: string; [key: string]: string }>;
+  uiText: {
+    title: string;
+  };
 }
 
-const ComparisonTableOG: React.FC<ComparisonTableOGProps> = ({ headers, rows }) => {
-  // Dynamically generate plan keys from headers (e.g., "Simple GH" -> "simple_gh")
+const ComparisonTableOG: React.FC<ComparisonTableOGProps> = ({ headers, rows, uiText }) => {
   const planKeys = headers.slice(1).map(h => 
-    h.toLowerCase().replace(/\s+/g, '_')
+    h.toLowerCase().replace(/\s+/g, '_').replace(/_gh$/, '') // handle both 'Simple GH' and 'Simple'
   );
-
+  
   return (
     <section className="py-8 animate-fade-in">
-      <h2 className="text-center text-3xl font-bold text-white mb-8">
-        Comparativo dos Planos <span className="text-[#FF0000]">GH</span>
+      <h2 className="text-center text-3xl font-bold text-white mb-8"
+        dangerouslySetInnerHTML={{ __html: uiText.title }}
+      >
       </h2>
       <div className="overflow-x-auto bg-gray-800 p-1 rounded-xl shadow-xl">
         <table className="min-w-full divide-y divide-gray-700">
@@ -26,7 +29,7 @@ const ComparisonTableOG: React.FC<ComparisonTableOGProps> = ({ headers, rows }) 
                   scope="col"
                   className={`px-4 py-3.5 text-left text-sm font-semibold 
                               ${index === 0 ? 'text-white' : 
-                                header.includes('Essencial GH') ? 'text-[#FF0000]' : 'text-gray-300'}`} // Highlight Essencial GH
+                                header.toLowerCase().includes('essencial') ? 'text-[#FF0000]' : 'text-gray-300'}`}
                 >
                   {header}
                 </th>
@@ -43,9 +46,9 @@ const ComparisonTableOG: React.FC<ComparisonTableOGProps> = ({ headers, rows }) 
                   <td
                     key={colIndex}
                     className={`whitespace-nowrap px-4 py-4 text-sm 
-                                ${planKey.includes('essencial_gh') ? 'text-[#FF0000] font-semibold' : 'text-gray-300'}`} // Highlight Essencial GH
+                                ${planKey.includes('essencial') ? 'text-[#FF0000] font-semibold' : 'text-gray-300'}`}
                   >
-                    {row[planKey] || row[headers[colIndex+1].toLowerCase().replace(/\s+/g, '_')] || '-'}
+                    {row[planKey] || '-'}
                   </td>
                 ))}
               </tr>

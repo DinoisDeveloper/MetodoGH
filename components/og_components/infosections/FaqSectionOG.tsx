@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FaqItem } from '../../../types'; 
-import { Button } from '../../Button'; 
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon'; 
 
 interface FaqItemProps {
@@ -26,18 +25,19 @@ const AccordionItem: React.FC<FaqItemProps> = ({ item, isOpen, onClick }) => {
       </h3>
       <div
         id={`faq-content-${item.question.replace(/\s+/g, '-')}`}
-        className={`p-5 border-t border-gray-700 bg-gray-800/50 transition-max-height duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-screen' : 'max-h-0'}`}
-        style={{ transitionProperty: 'max-height, padding', paddingTop: isOpen ? undefined : 0, paddingBottom: isOpen ? undefined : 0 }}
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-96' : 'max-h-0'}`}
       >
-        <p className="text-gray-400">{item.answer}</p>
+        <div className="p-5 border-t border-gray-700 bg-gray-800/50">
+          <p className="text-gray-400">{item.answer}</p>
+        </div>
       </div>
     </div>
   );
 };
 
 
-const FaqSectionOG: React.FC<{ faqs: FaqItem[]; }> = ({ faqs }) => { // onOpenChat prop removed
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+const FaqSectionOG: React.FC<{ faqs: FaqItem[]; uiText: { title: string; subtitle: string; footerText: string; footerSubtext: string } }> = ({ faqs, uiText }) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(0); // Open first question by default
 
   const handleItemClick = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -45,11 +45,12 @@ const FaqSectionOG: React.FC<{ faqs: FaqItem[]; }> = ({ faqs }) => { // onOpenCh
 
   return (
     <section className="py-8 animate-fade-in">
-      <h2 className="text-center text-3xl font-bold text-white mb-8">
-        Perguntas Frequentes <span className="text-[#FF0000]">Método GH</span>
+      <h2 className="text-center text-3xl font-bold text-white mb-8"
+        dangerouslySetInnerHTML={{ __html: uiText.title }}
+      >
       </h2>
       <p className="text-center text-gray-400 mb-10 max-w-lg mx-auto">
-        Tire suas dúvidas sobre os planos e o funcionamento do Método GH.
+        {uiText.subtitle}
       </p>
       <div className="max-w-2xl mx-auto space-y-3">
         {faqs.map((faq, index) => (
@@ -62,9 +63,8 @@ const FaqSectionOG: React.FC<{ faqs: FaqItem[]; }> = ({ faqs }) => { // onOpenCh
         ))}
       </div>
       <div className="text-center mt-10">
-        <p className="text-gray-400 mb-3">Ainda tem dúvidas sobre qual plano escolher?</p>
-        {/* "Fale com Especialista GH" button removed */}
-        <p className="text-gray-500 text-sm">Consulte os detalhes dos planos ou entre em contato por outros canais se disponíveis.</p> 
+        <p className="text-gray-400 mb-3">{uiText.footerText}</p>
+        <p className="text-gray-500 text-sm">{uiText.footerSubtext}</p> 
       </div>
     </section>
   );

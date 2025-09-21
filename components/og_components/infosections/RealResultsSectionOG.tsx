@@ -1,6 +1,15 @@
 import React from 'react';
 import { TestimonialItem } from '../../../types'; 
 
+interface RealResultsSectionOGProps {
+  testimonials: TestimonialItem[];
+  uiText: {
+    title: string;
+    subtitle: string;
+    ageSuffix: string;
+  };
+}
+
 const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
   <div className="flex">
     {[...Array(5)].map((_, i) => (
@@ -16,14 +25,15 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => (
   </div>
 );
 
-const RealResultsSectionOG: React.FC<{ testimonials: TestimonialItem[] }> = ({ testimonials }) => {
+const RealResultsSectionOG: React.FC<RealResultsSectionOGProps> = ({ testimonials, uiText }) => {
   return (
     <section className="py-8 animate-fade-in">
-      <h2 className="text-center text-3xl font-bold text-white mb-8">
-        Resultados Reais <span className="text-[#FF0000]">Método GH</span>
+      <h2 className="text-center text-3xl font-bold text-white mb-8"
+        dangerouslySetInnerHTML={{ __html: uiText.title }}
+      >
       </h2>
       <p className="text-center text-gray-400 mb-10 max-w-lg mx-auto">
-        Veja o que nossos alunos alcançaram com o Método GH.
+        {uiText.subtitle}
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
         {testimonials.map((testimonial, index) => (
@@ -37,13 +47,13 @@ const RealResultsSectionOG: React.FC<{ testimonials: TestimonialItem[] }> = ({ t
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded-full 
-                                     ${testimonial.planName.includes('Essencial') ? 'bg-white text-[#FF0000]' : 
-                                       testimonial.planName.includes('Elite') ? 'bg-white text-purple-600' : 'bg-white text-blue-600'}`}>
+                                     ${testimonial.planName.toLowerCase().includes('essencial') ? 'bg-white text-[#FF0000]' : 
+                                       testimonial.planName.toLowerCase().includes('elite') ? 'bg-white text-purple-600' : 'bg-white text-blue-600'}`}>
                     {testimonial.planName}
                   </span>
-                  <h3 className="text-lg font-semibold mt-1">{testimonial.personName}, {testimonial.age} anos</h3>
+                  <h3 className="text-lg font-semibold mt-1">{testimonial.personName}, {testimonial.age} {uiText.ageSuffix}</h3>
                 </div>
-                <p className={`text-2xl font-bold ${testimonial.planName.includes('Essencial') ? 'text-white' : 'text-[#FF0000]'}`}>
+                <p className={`text-2xl font-bold ${testimonial.planName.toLowerCase().includes('essencial') ? 'text-white' : 'text-[#FF0000]'}`}>
                     {testimonial.gain}
                 </p>
               </div>
