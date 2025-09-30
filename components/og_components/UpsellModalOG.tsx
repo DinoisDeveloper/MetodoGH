@@ -20,6 +20,8 @@ interface UpsellModalOGProps {
     communityLabel: string;
     ctaButton: string;
     declineButton: (planName: string) => string;
+    communityPriceDisplay: (price: string) => string;
+    totalPriceDisplay: (total: string) => string;
   };
 }
 
@@ -29,9 +31,7 @@ const UpsellModalOG: React.FC<UpsellModalOGProps> = ({ isOpen, onClose, plan, co
   const basePriceNum = parseFloat(plan.price.replace(/[^0-9,.-]/g, '').replace(',', '.').trim());
   const communityPriceNum = parseFloat(communityDetails.price.replace(',', '.').trim());
   const totalPriceNum = basePriceNum + communityPriceNum;
-  
-  const formatter = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'BRL' }); // This could be adapted with language
-  const totalPriceFormatted = `R$ ${totalPriceNum.toFixed(2).replace('.', ',')}`; // Simple formatting for now
+  const totalPriceString = totalPriceNum.toFixed(2); // Always use dot for calculations
 
   const communityLink = plan.purchaseLinkCommunity || '#'; 
   const basePlanLink = plan.purchaseLink;
@@ -75,12 +75,12 @@ const UpsellModalOG: React.FC<UpsellModalOGProps> = ({ isOpen, onClose, plan, co
             </div>
             <div className="flex justify-between items-center text-gray-300">
               <span className="text-[#FF0000]">{uiText.communityLabel}</span>
-              <span className="text-[#FF0000]">+ R$ {communityDetails.price}</span>
+              <span className="text-[#FF0000]">{uiText.communityPriceDisplay(communityDetails.price)}</span>
             </div>
             <div className="h-px bg-gray-600 my-1"></div>
             <div className="flex justify-between items-center text-white text-xl font-bold">
               <span>{uiText.totalLabel}</span>
-              <span>{totalPriceFormatted}</span>
+              <span>{uiText.totalPriceDisplay(totalPriceString)}</span>
             </div>
           </div>
 
